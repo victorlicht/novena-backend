@@ -7,6 +7,8 @@ import java.sql.Date;
 @Data
 public class PatientDto {
 
+    private String username;
+
     private String firstName;
 
     private String lastName;
