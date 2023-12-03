@@ -4,23 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-public class Appointment {
+public class Shift {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalDate appointmentDate;
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 
     @ManyToOne
     private Doctor doctor;
-
-    @ManyToOne
-    private Patient patient;
 }

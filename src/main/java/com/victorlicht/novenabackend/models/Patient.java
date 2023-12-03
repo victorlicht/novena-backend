@@ -1,13 +1,12 @@
 package com.victorlicht.novenabackend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +17,10 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
     private String firstName;
 
     private String lastName;
@@ -26,7 +29,12 @@ public class Patient {
 
     private String address;
 
+    @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
     private String healthInsurance;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Appointment> appointments = new ArrayList<>();
 }
