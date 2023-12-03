@@ -3,6 +3,9 @@ package com.victorlicht.novenabackend.mapper;
 import com.victorlicht.novenabackend.dtos.PatientDto;
 import com.victorlicht.novenabackend.models.Patient;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PatientMapper {
     public static PatientDto toDto(Patient patient) {
         PatientDto patientDto = new PatientDto();
@@ -50,5 +53,11 @@ public class PatientMapper {
         if (patientDto.getHealthInsurance() != null) {
             patient.setHealthInsurance(patientDto.getHealthInsurance());
         }
+    }
+
+    public static List<PatientDto> findAllPatientsToDto(List<Patient> patients) {
+        return patients.stream()
+                .map(PatientMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
