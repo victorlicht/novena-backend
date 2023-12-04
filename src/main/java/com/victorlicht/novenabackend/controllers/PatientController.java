@@ -81,4 +81,30 @@ public class PatientController {
                     .body("Failed to update patient account: " + e.getMessage());
         }
     }
+
+    @DeleteMapping("/admin/delete/{username}")
+    public ResponseEntity<?> deletePatientAccount(@PathVariable String username) {
+        try {
+            PatientDto existingPatient = patientService.findByUsername(username);
+
+            if (existingPatient != null) {
+                patientService.deletePatientAccount(existingPatient);
+                return ResponseEntity
+                        .status(HttpStatus.NO_CONTENT)
+                        .body(existingPatient.getFirstName() + " " + existingPatient.getLastName() + " Has Been Successfully Deleted");
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Username not found" + username);
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid input: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update patient account: " + e.getMessage());
+        }
+    }
 }
