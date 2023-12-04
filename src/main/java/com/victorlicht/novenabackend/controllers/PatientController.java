@@ -54,5 +54,31 @@ public class PatientController {
         }
     }
 
+    @PutMapping("/admin/update/{username}")
+    public ResponseEntity<?> updatePatientAccount(@PathVariable String username, @Validated @RequestBody PatientDto patientDto) {
+        try {
+            PatientDto existingPatient = patientService.findByUsername(username);
 
+            if (existingPatient != null) {
+                Patient updatedPatient = PatientMapper.toEntity(patientDto);
+                updatedPatient.setUsername(existingPatient.getUsername());
+                PatientDto updatedDto = patientService.updatePatientAccount(patientDto, updatedPatient);
+                return ResponseEntity
+                        .status(HttpStatus.ACCEPTED)
+                        .body(updatedDto);
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Username not found" + username);
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid input: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update patient account: " + e.getMessage());
+        }
+    }
 }
