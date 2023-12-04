@@ -11,5 +11,6 @@ public interface PatientService {
     PatientDto updatePatientAccount(PatientDto patientDto, Patient patient);
     void deletePatientAccount(PatientDto patientDto);
     List<PatientDto> findAllPatients();
+    PatientDto findByUsername(String username);
 
 }

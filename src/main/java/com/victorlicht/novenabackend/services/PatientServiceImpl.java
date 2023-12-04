@@ -40,4 +40,9 @@ public class PatientServiceImpl implements PatientService{
         return PatientMapper.findAllPatientsToDto(patientRepository.findAll());
     }
 
+    @Override
+    public PatientDto findByUsername(String username) {
+        return PatientMapper.toDto(patientRepository.findByUsername(username));
+    }
+
 }
