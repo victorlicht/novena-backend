@@ -31,8 +31,8 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public void deletePatientAccount(PatientDto patientDto) {
-        patientRepository.delete(PatientMapper.toEntity(patientDto));
+    public void deletePatientAccount(Patient patient) {
+        patientRepository.delete(patient);
     }
 
     @Override
@@ -41,8 +41,7 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public PatientDto findByUsername(String username) {
-        return PatientMapper.toDto(patientRepository.findByUsername(username));
+    public Patient findByUsername(String username) {
+        return patientRepository.findByUsername(username);
     }
-
 }

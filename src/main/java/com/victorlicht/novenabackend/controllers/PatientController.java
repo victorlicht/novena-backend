@@ -1,14 +1,13 @@
 package com.victorlicht.novenabackend.controllers;
 
 import com.victorlicht.novenabackend.dtos.PatientDto;
-import com.victorlicht.novenabackend.mapper.PatientMapper;
 import com.victorlicht.novenabackend.models.Patient;
 import com.victorlicht.novenabackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -24,6 +23,7 @@ public class PatientController {
     }
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> findAllPatients() {
         try {
             return ResponseEntity
@@ -37,7 +37,8 @@ public class PatientController {
     }
 
     @PostMapping("/admin/create")
-    public ResponseEntity<?> createPatientAccount(@Validated @RequestBody PatientDto patientDto) {
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> createPatientAccount(@RequestBody PatientDto patientDto) {
         try {
             PatientDto createdPatient = patientService.createPatientAccount(patientDto);
             return ResponseEntity
@@ -55,17 +56,16 @@ public class PatientController {
     }
 
     @PutMapping("/admin/update/{username}")
-    public ResponseEntity<?> updatePatientAccount(@PathVariable String username, @Validated @RequestBody PatientDto patientDto) {
+    public ResponseEntity<?> updatePatientAccount(@PathVariable String username, @RequestBody PatientDto patientDto) {
         try {
-            PatientDto existingPatient = patientService.findByUsername(username);
+            Patient existingPatient = patientService.findByUsername(username);
 
             if (existingPatient != null) {
-                Patient updatedPatient = PatientMapper.toEntity(patientDto);
-                updatedPatient.setUsername(existingPatient.getUsername());
-                PatientDto updatedDto = patientService.updatePatientAccount(patientDto, updatedPatient);
+                PatientDto updatedPatientAccount = patientService
+                        .updatePatientAccount(patientDto, existingPatient);
                 return ResponseEntity
                         .status(HttpStatus.ACCEPTED)
-                        .body(updatedDto);
+                        .body(updatedPatientAccount);
             } else {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -85,17 +85,16 @@ public class PatientController {
     @DeleteMapping("/admin/delete/{username}")
     public ResponseEntity<?> deletePatientAccount(@PathVariable String username) {
         try {
-            PatientDto existingPatient = patientService.findByUsername(username);
-
+            Patient existingPatient = patientService.findByUsername(username);
             if (existingPatient != null) {
                 patientService.deletePatientAccount(existingPatient);
                 return ResponseEntity
                         .status(HttpStatus.NO_CONTENT)
-                        .body(existingPatient.getFirstName() + " " + existingPatient.getLastName() + " Has Been Successfully Deleted");
+                        .body("Deleted");
             } else {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
-                        .body("Username not found" + username);
+                        .body("Username not found: " + username);
             }
         } catch (IllegalArgumentException e) {
             return ResponseEntity

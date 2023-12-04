@@ -9,8 +9,8 @@ public interface PatientService {
 
     PatientDto createPatientAccount(PatientDto patientDto);
     PatientDto updatePatientAccount(PatientDto patientDto, Patient patient);
-    void deletePatientAccount(PatientDto patientDto);
+    void deletePatientAccount(Patient patient);
     List<PatientDto> findAllPatients();
-    PatientDto findByUsername(String username);
+    Patient findByUsername(String username);
 
 }
