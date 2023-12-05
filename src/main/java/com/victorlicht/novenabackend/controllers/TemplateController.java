@@ -11,4 +11,9 @@ public class TemplateController {
         // Add any necessary model attributes if needed
         return "home";
     }
+    @GetMapping("/admin") // Define your endpoint path
+    public String admin() {
+        // Add any necessary model attributes if needed
+        return "admin";
+    }
 }
