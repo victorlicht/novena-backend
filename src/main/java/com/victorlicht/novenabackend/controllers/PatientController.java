@@ -6,15 +6,16 @@ import com.victorlicht.novenabackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/v1/patients")
 public class PatientController {
-    //TODO: Patient(Admin Control) Create, List & Filter, Update, Search, Delete
-
+    //TODO: Patient(Admin Control) List & Filter
+    //TODO: Patient(Patient) Register, Update, Show, Delete, Show All Doctors, Choose Appointment Day with Doctor
+    //TODO: Cancel Appointment, ReminderBeforeAppointment
+    //TODO: Can Login, Logout Register and Login
     private final PatientService patientService;
 
     @Autowired
@@ -23,7 +24,6 @@ public class PatientController {
     }
 
     @GetMapping
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> findAllPatients() {
         try {
             return ResponseEntity
@@ -36,8 +36,22 @@ public class PatientController {
         }
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> findByUsername(@RequestParam String username) {
+        Patient existingPatient = patientService.findByUsername(username);
+
+        if (existingPatient != null) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .body(existingPatient);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Username not found" + username);
+        }
+    }
+
     @PostMapping("/admin/create")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createPatientAccount(@RequestBody PatientDto patientDto) {
         try {
             PatientDto createdPatient = patientService.createPatientAccount(patientDto);
