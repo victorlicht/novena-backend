@@ -16,7 +16,13 @@ public class Appointment {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate appointmentDate;
+    private LocalDate date;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean status; // Indicates whether the appointment is confirmed by the doctor. Default is false until confirmed.
+
+    @Column(length = 1000)
+    private String description;
 
     @ManyToOne
     private Doctor doctor;

@@ -3,6 +3,9 @@ package com.victorlicht.novenabackend.mapper;
 import com.victorlicht.novenabackend.dtos.DoctorDto;
 import com.victorlicht.novenabackend.models.Doctor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class DoctorMapper {
     public static DoctorDto toDto(Doctor doctor) {
         DoctorDto doctorDto = new DoctorDto();
@@ -11,6 +14,9 @@ public class DoctorMapper {
         doctorDto.setLastName(doctor.getLastName());
         doctorDto.setDateOfBirth(doctor.getDateOfBirth());
         doctorDto.setPhoneNumber(doctor.getPhoneNumber());
+        doctorDto.setAppointments(doctor.getAppointments());
+        doctorDto.setShifts(doctorDto.getShifts());
+
         return doctorDto;
     }
 
@@ -21,6 +27,9 @@ public class DoctorMapper {
         doctor.setLastName(doctorDto.getLastName());
         doctor.setDateOfBirth(doctorDto.getDateOfBirth());
         doctor.setPhoneNumber(doctorDto.getPhoneNumber());
+        doctor.setAppointments(doctorDto.getAppointments());
+        doctor.setShifts(doctorDto.getShifts());
+
         return doctor;
     }
 
@@ -40,5 +49,17 @@ public class DoctorMapper {
         if (doctorDto.getPhoneNumber() != null) {
             doctor.setPhoneNumber(doctorDto.getPhoneNumber());
         }
+        if (doctorDto.getAppointments() != null) {
+            doctor.setAppointments(doctorDto.getAppointments());
+        }
+        if (doctorDto.getShifts() != null) {
+            doctor.setShifts(doctorDto.getShifts());
+        }
+    }
+
+    public static List<DoctorDto> findAllDoctorsToDto(List<Doctor> doctors) {
+        return doctors.stream()
+                .map(DoctorMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

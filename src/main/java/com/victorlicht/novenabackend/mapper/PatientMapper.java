@@ -16,6 +16,8 @@ public class PatientMapper {
         patientDto.setAddress(patient.getAddress());
         patientDto.setPhoneNumber(patient.getPhoneNumber());
         patientDto.setHealthInsurance(patient.getHealthInsurance());
+        patientDto.setAppointments(patient.getAppointments());
+
         return patientDto;
     }
 
@@ -28,6 +30,8 @@ public class PatientMapper {
         patient.setAddress(patientDto.getAddress());
         patient.setPhoneNumber(patientDto.getPhoneNumber());
         patient.setHealthInsurance(patientDto.getHealthInsurance());
+        patient.setAppointments(patientDto.getAppointments());
+
         return patient;
     }
 
@@ -52,6 +56,9 @@ public class PatientMapper {
         }
         if (patientDto.getHealthInsurance() != null) {
             patient.setHealthInsurance(patientDto.getHealthInsurance());
+        }
+        if (patientDto.getAppointments() != null) {
+            patient.setAppointments(patientDto.getAppointments());
         }
     }
 

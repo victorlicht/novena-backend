@@ -2,29 +2,44 @@ package com.victorlicht.novenabackend.mapper;
 
 import com.victorlicht.novenabackend.dtos.AppointmentDto;
 import com.victorlicht.novenabackend.models.Appointment;
-import com.victorlicht.novenabackend.models.Doctor;
-import com.victorlicht.novenabackend.models.Patient;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AppointmentMapper {
     public static AppointmentDto toDto(Appointment appointment) {
         AppointmentDto appointmentDto = new AppointmentDto();
         appointmentDto.setId(appointment.getId());
-        appointmentDto.setAppointmentDate(appointment.getAppointmentDate());
-        if (appointment.getDoctor() != null) {
-            appointmentDto.setDoctorId(appointment.getDoctor().getId());
-        }
-        if (appointment.getPatient() != null) {
-            appointmentDto.setPatientId(appointment.getPatient().getId());
-        }
+        appointmentDto.setDate(appointment.getDate());
+        appointmentDto.setStatus(appointment.isStatus());
+        appointmentDto.setDescription(appointment.getDescription());
+        appointmentDto.setDoctorDto(DoctorMapper.toDto(appointment.getDoctor()));
+        appointmentDto.setPatientDto(PatientMapper.toDto(appointment.getPatient()));
+
         return appointmentDto;
     }
 
-    public static Appointment toEntity(AppointmentDto appointmentDto, Doctor doctor, Patient patient) {
+    public static Appointment toEntity(AppointmentDto appointmentDto) {
         Appointment appointment = new Appointment();
         appointment.setId(appointmentDto.getId());
-        appointment.setAppointmentDate(appointmentDto.getAppointmentDate());
-        appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
+        appointment.setDate(appointmentDto.getDate());
+        appointment.setStatus(appointmentDto.isStatus());
+        appointment.setDescription(appointmentDto.getDescription());
+        appointment.setDoctor(DoctorMapper.toEntity(appointmentDto.getDoctorDto()));
+        appointment.setPatient(PatientMapper.toEntity(appointmentDto.getPatientDto()));
+
         return appointment;
+    }
+
+    public static void updateEntityDescriptionFromDto(AppointmentDto appointmentDto, Appointment appointment) {
+        if (appointmentDto.getDescription() != null) {
+            appointment.setDescription(appointmentDto.getDescription());
+        }
+    }
+
+    public static List<AppointmentDto> findAllAppointmentsToDto(List<Appointment> appointments) {
+        return appointments.stream()
+                .map(AppointmentMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

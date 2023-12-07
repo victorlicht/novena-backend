@@ -9,9 +9,13 @@ public class AppointmentDto {
 
     private Long id;
 
-    private LocalDate appointmentDate;
+    private LocalDate date;
 
-    private String doctorId;
+    private boolean status;
 
-    private String patientId;
+    private String description;
+
+    private DoctorDto doctorDto;
+
+    private PatientDto patientDto;
 }
