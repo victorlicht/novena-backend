@@ -16,22 +16,30 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
     private Date dateOfBirth;
 
+    @Column(nullable = false)
     private String address;
 
-    @Column(unique = true)
+    private final String role = "PATIENT";
+
+    @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String healthInsurance;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
