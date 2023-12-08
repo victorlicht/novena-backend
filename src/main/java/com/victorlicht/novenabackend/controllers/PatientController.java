@@ -6,10 +6,11 @@ import com.victorlicht.novenabackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/patients")
 public class PatientController {
     //TODO: Patient(Admin Control) List & Filter
@@ -18,9 +19,15 @@ public class PatientController {
     //TODO: Can Login, Logout Register and Login
     private final PatientService patientService;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
+
     @Autowired
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.patientService = patientService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping
@@ -54,6 +61,9 @@ public class PatientController {
     @PostMapping("/admin/create")
     public ResponseEntity<?> createPatientAccount(@RequestBody PatientDto patientDto) {
         try {
+            String hashedPassword = passwordEncoder.encode(patientDto.getPassword());
+            patientDto.setPassword(hashedPassword);
+
             PatientDto createdPatient = patientService.createPatientAccount(patientDto);
             return ResponseEntity
                     .status(HttpStatus.CREATED)

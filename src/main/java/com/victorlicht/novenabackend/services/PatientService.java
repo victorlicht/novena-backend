@@ -12,5 +12,4 @@ public interface PatientService {
     void deletePatientAccount(Patient patient);
     List<PatientDto> findAllPatients();
     Patient findByUsername(String username);
-
 }
