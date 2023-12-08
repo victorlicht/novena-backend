@@ -6,7 +6,6 @@ import com.victorlicht.novenabackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,13 +20,10 @@ public class PatientController {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthenticationManager authenticationManager;
-
     @Autowired
-    public PatientController(PatientService patientService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public PatientController(PatientService patientService, PasswordEncoder passwordEncoder) {
         this.patientService = patientService;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping

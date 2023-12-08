@@ -5,12 +5,17 @@ import com.victorlicht.novenabackend.mapper.PatientMapper;
 import com.victorlicht.novenabackend.models.Patient;
 import com.victorlicht.novenabackend.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
-public class PatientServiceImpl implements PatientService {
+public class PatientServiceImpl implements PatientService, UserDetailsService {
 
     private final PatientRepository patientRepository;
 
@@ -44,5 +49,27 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Patient findByUsername(String username) {
         return patientRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Patient loadedPatient = patientRepository.findByUsername(username);
+
+        if (loadedPatient == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
+        String password = loadedPatient.getPassword();;
+        String role = loadedPatient.getRole();
+
+        return new org.springframework.security.core.userdetails.User(
+                username,
+                password,
+                true,
+                true,
+                true,
+                true,
+                Collections.singleton(new SimpleGrantedAuthority(role))
+        );
     }
 }

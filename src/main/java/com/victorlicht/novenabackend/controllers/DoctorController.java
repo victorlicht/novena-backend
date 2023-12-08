@@ -6,6 +6,7 @@ import com.victorlicht.novenabackend.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,12 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public DoctorController(DoctorService doctorService) {
+    public DoctorController(DoctorService doctorService, PasswordEncoder passwordEncoder) {
         this.doctorService = doctorService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -56,6 +60,9 @@ public class DoctorController {
     @PostMapping("/admin/create")
     public ResponseEntity<?> createDoctorAccount(@RequestBody DoctorDto doctorDto) {
         try {
+            String hashedPassword = passwordEncoder.encode(doctorDto.getPassword());
+            doctorDto.setPassword(hashedPassword);
+
             DoctorDto createdDoctor = doctorService.createDoctorAccount(doctorDto);
             return ResponseEntity
                     .status(HttpStatus.CREATED)

@@ -1,5 +1,8 @@
 package com.victorlicht.novenabackend.security.auth;
 
+import com.victorlicht.novenabackend.services.AdminServiceImpl;
+import com.victorlicht.novenabackend.services.DoctorServiceImpl;
+import com.victorlicht.novenabackend.services.PatientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +25,30 @@ public class UsersAuthenticationController {
 
     private final AuthenticationManager authenticationManager;
 
-    private final CustomUserDetailsService userDetailsService;
+    private final PatientServiceImpl patientService;
+
+    private final DoctorServiceImpl doctorService;
+
+    private final AdminServiceImpl adminService;
 
     @Autowired
-    public UsersAuthenticationController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService) {
+    public UsersAuthenticationController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                                         PatientServiceImpl patientService, DoctorServiceImpl doctorService, AdminServiceImpl adminService) {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
+        this.patientService = patientService;
+        this.doctorService = doctorService;
+        this.adminService = adminService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody AuthLoginForm authLoginForm) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authLoginForm.getUsername());
+    public ResponseEntity<?> authenticatePatient(@RequestBody AuthLoginForm authLoginForm) {
+        UserDetails userDetails = patientService.loadUserByUsername(authLoginForm.getUsername());
+        if (authLoginForm.getRole().equals("ADMIN")) {
+            userDetails = adminService.loadUserByUsername(authLoginForm.getUsername());
+        }else if (authLoginForm.getRole().equals("DOCTOR")){
+            userDetails = doctorService.loadUserByUsername(authLoginForm.getUsername());
+        }
 
         if (passwordEncoder.matches(authLoginForm.getPassword(), userDetails.getPassword())) {
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -44,5 +59,6 @@ public class UsersAuthenticationController {
             return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 }

@@ -2,12 +2,84 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-    <title>Hello </title>
+    <title>Hello</title>
 </head>
 <body>
-<h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
+<h1>Registration Form</h1>
+
+<form id="createPatientForm" th:action="@{/api/v1/patients/admin/create}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required/>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required/>
+    </div>
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required/>
+    </div>
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required/>
+    </div>
+    <div>
+        <label for="dateOfBirth">Date of Birth:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" required/>
+    </div>
+    <div>
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required/>
+    </div>
+    <div>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required/>
+    </div>
+    <div>
+        <label for="healthInsurance">Health Insurance:</label>
+        <input type="text" id="healthInsurance" name="healthInsurance" required/>
+    </div>
+    <div>
+        <input type="submit" value="Register"/>
+    </div>
 </form>
+
+<script>
+    const createPatient = async (formData) => {
+        try {
+            const response = await fetch('/api/v1/patients/admin/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
+            console.log('Created patient:', data);
+            // Handle success or display message to the user
+        } catch (error) {
+            console.error('Error creating patient:', error);
+            // Handle error or display message to the user
+        }
+    };
+
+    document.getElementById('createPatientForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        console.log("clicked")
+        const formData = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            dateOfBirth: document.getElementById('dateOfBirth').value,
+            address: document.getElementById('address').value,
+            phoneNumber: document.getElementById('phoneNumber').value,
+            healthInsurance: document.getElementById('healthInsurance').value
+        };
+        await createPatient(formData);
+    });
+</script>
+
 </body>
 </html>

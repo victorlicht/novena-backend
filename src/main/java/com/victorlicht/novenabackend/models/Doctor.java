@@ -3,7 +3,6 @@ package com.victorlicht.novenabackend.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
 
 import java.sql.Date;
 import java.util.List;
@@ -40,7 +39,6 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 
-    @NonNull
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Shift> shifts;
 }

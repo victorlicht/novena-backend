@@ -30,13 +30,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/v1/patients/login", "/auth/login"))
+                        .ignoringRequestMatchers("/api/v1/doctors/admin/create", "/auth/login"))
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/home", "/").hasAnyRole("ADMIN", "PATIENT")
                         .requestMatchers("/api/v1/***").anonymous()
                         .requestMatchers("/auth/login").anonymous()
-                        .requestMatchers("/api/v1/patients/login").anonymous()
+                        .requestMatchers("/api/v1/doctors/admin/create").anonymous()
                         .requestMatchers("/hello").anonymous()
                         .anyRequest().authenticated());
         return http.build();
