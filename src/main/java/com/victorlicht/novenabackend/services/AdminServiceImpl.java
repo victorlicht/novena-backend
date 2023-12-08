@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService, UserDetailsService {
@@ -24,6 +25,26 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
     @Override
     public Admin findByUsername(String username) {
         return adminRepository.findByUsername(username);
+    }
+
+    @Override
+    public Admin createAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
+
+    @Override
+    public Admin updateAdmin(Admin admin) {
+       return adminRepository.save(admin);
+    }
+
+    @Override
+    public void deleteAdmin(Admin admin) {
+        adminRepository.delete(admin);
+    }
+
+    @Override
+    public List<Admin> findAllAdmins() {
+        return adminRepository.findAll();
     }
 
     @Override
