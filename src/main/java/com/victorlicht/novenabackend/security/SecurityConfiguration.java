@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/api/v1/***").anonymous()
                         .requestMatchers("/auth/login").anonymous()
-                        .requestMatchers("/api/v1/admins/create").anonymous()
+                        .requestMatchers("/auth/register/patient").anonymous()
                         .requestMatchers("/hello").anonymous()
                         .anyRequest().authenticated());
         return http.build();

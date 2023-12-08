@@ -1,5 +1,6 @@
 package com.victorlicht.novenabackend.security.auth;
 
+import com.victorlicht.novenabackend.dtos.PatientDto;
 import com.victorlicht.novenabackend.services.AdminServiceImpl;
 import com.victorlicht.novenabackend.services.DoctorServiceImpl;
 import com.victorlicht.novenabackend.services.PatientServiceImpl;
@@ -69,5 +70,40 @@ public class UsersAuthenticationController {
             return new ResponseEntity<>("Authentication failed.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/register/patient")
+    public ResponseEntity<?> registerPatient(@RequestBody PatientRegistrationForm patientForm) {
+        try {
+            // Check if the username already exists
+            if (patientService.findByUsername(patientForm.getUsername()) != null) {
+                return new ResponseEntity<>("Username is already taken.", HttpStatus.BAD_REQUEST);
+            }
+
+            // Validate if passwords match
+            if (!patientForm.getPassword().equals(patientForm.getConfirmPassword())) {
+                return new ResponseEntity<>("Passwords do not match.", HttpStatus.BAD_REQUEST);
+            }
+
+            // Create a new Patient object from the registration form
+            PatientDto patient = new PatientDto();
+            patient.setUsername(patientForm.getUsername());
+            patient.setPassword(passwordEncoder.encode(patientForm.getPassword()));
+            patient.setFirstName(patientForm.getFirstName());
+            patient.setLastName(patientForm.getLastName());
+            patient.setDateOfBirth(patientForm.getDateOfBirth());
+            patient.setAddress(patientForm.getAddress());
+            patient.setPhoneNumber(patientForm.getPhoneNumber());
+            patient.setHealthInsurance(patientForm.getHealthInsurance());
+
+            // Save the patient
+            PatientDto savedPatient = patientService.createPatientAccount(patient);
+
+            // Return a success response with the saved patient details
+            return new ResponseEntity<>("Patient registered successfully: " + savedPatient, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Registration failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
