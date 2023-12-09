@@ -2,16 +2,14 @@ package com.victorlicht.novenabackend.dtos;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 @Data
 public class AppointmentDto {
 
     private Long id;
 
-    private LocalDate date;
-
-    private boolean status;
+    private Date date;
 
     private String description;
 

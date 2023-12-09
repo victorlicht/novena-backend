@@ -11,7 +11,6 @@ public class AppointmentMapper {
         AppointmentDto appointmentDto = new AppointmentDto();
         appointmentDto.setId(appointment.getId());
         appointmentDto.setDate(appointment.getDate());
-        appointmentDto.setStatus(appointment.isStatus());
         appointmentDto.setDescription(appointment.getDescription());
         appointmentDto.setDoctorDto(DoctorMapper.toDto(appointment.getDoctor()));
         appointmentDto.setPatientDto(PatientMapper.toDto(appointment.getPatient()));
@@ -23,7 +22,6 @@ public class AppointmentMapper {
         Appointment appointment = new Appointment();
         appointment.setId(appointmentDto.getId());
         appointment.setDate(appointmentDto.getDate());
-        appointment.setStatus(appointmentDto.isStatus());
         appointment.setDescription(appointmentDto.getDescription());
         appointment.setDoctor(DoctorMapper.toEntity(appointmentDto.getDoctorDto()));
         appointment.setPatient(PatientMapper.toEntity(appointmentDto.getPatientDto()));
