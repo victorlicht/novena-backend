@@ -4,21 +4,28 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"doctor_id", "date", "available", "appointmentsPerDay"})
+})
 public class Shift {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime startTime;
+    private Date date;
 
-    private LocalDateTime endTime;
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean available;
+
+    private int appointmentsPerDay;
 
     @ManyToOne
     private Doctor doctor;
+
 }
