@@ -1,10 +1,8 @@
 package com.victorlicht.novenabackend.dtos;
 
-import com.victorlicht.novenabackend.models.Appointment;
 import lombok.Data;
 
 import java.sql.Date;
-import java.util.List;
 
 @Data
 public class PatientDto {
@@ -25,5 +23,4 @@ public class PatientDto {
 
     private String healthInsurance;
 
-    private List<Appointment> appointments;
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -42,6 +41,4 @@ public class Patient {
     @Column(unique = true, nullable = false)
     private String healthInsurance;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> appointments;
 }

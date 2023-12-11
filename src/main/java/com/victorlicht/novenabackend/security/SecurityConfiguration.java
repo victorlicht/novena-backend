@@ -22,14 +22,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/v1/***", "/auth/login"))
+                        .ignoringRequestMatchers("/api/v1/doctors/{username}/shifts",
+                                "/api/v1/patients/admin/create",
+                                "/api/v1/admins/create",
+                                "/api/v1/appointments/book/{patientUsername}/{doctorUsername}",
+                                "/auth/login"))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/logout").permitAll()
-                        .requestMatchers("/api/v1/***").anonymous()
-                        .requestMatchers("/auth/login").anonymous()
-                        .requestMatchers("/auth/register/patient").anonymous()
-                        .requestMatchers("/hello").anonymous()
-                        .anyRequest().authenticated());
+                        .anyRequest().anonymous());
         return http.build();
     }
 
