@@ -2,6 +2,7 @@ package com.victorlicht.novenabackend.controllers;
 
 import com.victorlicht.novenabackend.dtos.DoctorDto;
 import com.victorlicht.novenabackend.models.Doctor;
+import com.victorlicht.novenabackend.models.Shift;
 import com.victorlicht.novenabackend.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/doctors")
@@ -130,4 +133,43 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/{username}/shifts")
+    public ResponseEntity<List<Shift>> listShifts(@PathVariable String username) {
+        Doctor doctor = doctorService.findByUsername(username);
+        if (doctor != null) {
+            List<Shift> shifts = doctorService.listShifts();
+            List<Shift> doctorShifts = null;
+            for (Shift shift: shifts) {
+                if (shift.getDoctor() == doctor)
+                    if (shift.isAvailable())
+                        doctorShifts.add(shift);
+            }
+            return new ResponseEntity<>(doctorShifts, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{username}/shifts")
+    public ResponseEntity<Shift> createShift(@PathVariable String username, @RequestBody Shift shift) {
+        Doctor doctor = doctorService.findByUsername(username);
+        if (doctor != null) {
+            shift.setDoctor(doctor);
+            Shift createdShift = doctorService.createShift(shift);
+            return new ResponseEntity<>(createdShift, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{username}/shifts")
+    public ResponseEntity<?> deleteShift(@PathVariable String username, @RequestBody Shift shift) {
+        Doctor doctor = doctorService.findByUsername(username);
+        if (doctor != null) {
+            doctorService.deleteShift(shift);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

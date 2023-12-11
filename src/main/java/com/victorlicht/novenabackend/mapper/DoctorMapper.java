@@ -15,8 +15,6 @@ public class DoctorMapper {
         doctorDto.setLastName(doctor.getLastName());
         doctorDto.setDateOfBirth(doctor.getDateOfBirth());
         doctorDto.setPhoneNumber(doctor.getPhoneNumber());
-        doctorDto.setAppointments(doctor.getAppointments());
-        doctorDto.setShifts(doctorDto.getShifts());
 
         return doctorDto;
     }
@@ -29,8 +27,6 @@ public class DoctorMapper {
         doctor.setLastName(doctorDto.getLastName());
         doctor.setDateOfBirth(doctorDto.getDateOfBirth());
         doctor.setPhoneNumber(doctorDto.getPhoneNumber());
-        doctor.setAppointments(doctorDto.getAppointments());
-        doctor.setShifts(doctorDto.getShifts());
 
         return doctor;
     }
@@ -50,12 +46,6 @@ public class DoctorMapper {
         }
         if (doctorDto.getPhoneNumber() != null) {
             doctor.setPhoneNumber(doctorDto.getPhoneNumber());
-        }
-        if (doctorDto.getAppointments() != null) {
-            doctor.setAppointments(doctorDto.getAppointments());
-        }
-        if (doctorDto.getShifts() != null) {
-            doctor.setShifts(doctorDto.getShifts());
         }
     }
 

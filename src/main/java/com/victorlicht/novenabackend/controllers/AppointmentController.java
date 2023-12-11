@@ -1,8 +1,14 @@
 package com.victorlicht.novenabackend.controllers;
 
 import com.victorlicht.novenabackend.dtos.AppointmentDto;
+import com.victorlicht.novenabackend.mapper.DoctorMapper;
+import com.victorlicht.novenabackend.mapper.PatientMapper;
 import com.victorlicht.novenabackend.models.Appointment;
+import com.victorlicht.novenabackend.models.Doctor;
+import com.victorlicht.novenabackend.models.Patient;
 import com.victorlicht.novenabackend.services.AppointmentService;
+import com.victorlicht.novenabackend.services.DoctorService;
+import com.victorlicht.novenabackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +31,26 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
+    private final DoctorService doctorService;
+
+    private final PatientService patientService;
+
     @Autowired
-    public AppointmentController(AppointmentService appointmentService) {
+    public AppointmentController(AppointmentService appointmentService, DoctorService doctorService, PatientService patientService) {
         this.appointmentService = appointmentService;
+        this.doctorService = doctorService;
+        this.patientService = patientService;
     }
 
-    @PostMapping("/book")
-    public ResponseEntity<?> bookAppointment(@RequestBody AppointmentDto appointmentDto) {
+    @PostMapping("/book/{patientUsername}/{doctorUsername}")
+    public ResponseEntity<?> bookAppointment(@RequestBody Appointment appointment, @PathVariable String patientUsername,
+                                             @PathVariable String doctorUsername) {
         try {
-            if (appointmentService.createAppointment(appointmentDto) != null) {
+            Doctor doctor = doctorService.findByUsername(doctorUsername);
+            Patient patient = patientService.findByUsername(patientUsername);
+            appointment.setDoctor(doctor);
+            appointment.setPatient(patient);
+            if (appointmentService.createAppointment(appointment) != null) {
                 return ResponseEntity.ok("Appointment booked successfully. Waiting for confirmation.");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to book appointment");
