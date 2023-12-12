@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/v1/doctors")
 public class DoctorController {
-    //TODO: (Admin Control) Create, Update, List & Filter, Delete
+    // List & Filter
     //TODO: (Doctor) Show All Doctor(Has Appointment with him), Login(Just Admin Can Create Doctor Account Than
     //TODO: Doctor Complete to Fill All The Information and Yeah Account Created Successfully)
     //TODO: (Doctor) Update, Delete, Confirm Appointment or Decline it, Check for Doctor he consult
