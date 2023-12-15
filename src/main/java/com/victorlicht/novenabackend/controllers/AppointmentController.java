@@ -1,8 +1,5 @@
 package com.victorlicht.novenabackend.controllers;
 
-import com.victorlicht.novenabackend.dtos.AppointmentDto;
-import com.victorlicht.novenabackend.mapper.DoctorMapper;
-import com.victorlicht.novenabackend.mapper.PatientMapper;
 import com.victorlicht.novenabackend.models.Appointment;
 import com.victorlicht.novenabackend.models.Doctor;
 import com.victorlicht.novenabackend.models.Patient;
@@ -20,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/appointments")
 public class AppointmentController {
-    //TODO: Delete Appointment, SetOne (Between Doctor & Patient) No Edit you want to edit delete set one new
+    // TODO: Delete Appointment, SetOne (Between Doctor & Patient) No Edit you want to edit delete set one new
     // Reminder For Patient (to Set one appointment there is a lot of logic hiding there
     // For example after the doctor set his shifts, one shift has start and end time and then we do this
     // you set appointment we check with the shifts if it's yes you are putting appointment in the place of waiting
@@ -28,6 +25,7 @@ public class AppointmentController {
     // how to check is shifts end by method checks in stack is there is any place to push my self there no so if it's full
     // he can't accept (and i guess i will build a method when the stack is end he set all at the same day cancel automatically)
     // a lot of logic for app seems simple
+
 
     private final AppointmentService appointmentService;
 
@@ -42,9 +40,9 @@ public class AppointmentController {
         this.patientService = patientService;
     }
 
-    @PostMapping("/book/{patientUsername}/{doctorUsername}")
-    public ResponseEntity<?> bookAppointment(@RequestBody Appointment appointment, @PathVariable String patientUsername,
-                                             @PathVariable String doctorUsername) {
+    @PostMapping
+    public ResponseEntity<?> bookAppointment(@RequestBody Appointment appointment, @RequestParam String patientUsername,
+                                             @RequestParam String doctorUsername) {
         try {
             Doctor doctor = doctorService.findByUsername(doctorUsername);
             Patient patient = patientService.findByUsername(patientUsername);

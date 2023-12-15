@@ -39,7 +39,7 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<?> findByUsername(@RequestParam String username) {
         Patient existingPatient = patientService.findByUsername(username);
 
@@ -54,7 +54,7 @@ public class PatientController {
         }
     }
 
-    @PostMapping("/admin/create")
+    @PostMapping
     public ResponseEntity<?> createPatientAccount(@RequestBody PatientDto patientDto) {
         try {
             String hashedPassword = passwordEncoder.encode(patientDto.getPassword());
@@ -75,8 +75,8 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/admin/update/{username}")
-    public ResponseEntity<?> updatePatientAccount(@PathVariable String username, @RequestBody PatientDto patientDto) {
+    @PutMapping
+    public ResponseEntity<?> updatePatientAccount(@RequestParam String username, @RequestBody PatientDto patientDto) {
         try {
             Patient existingPatient = patientService.findByUsername(username);
 
@@ -102,8 +102,8 @@ public class PatientController {
         }
     }
 
-    @DeleteMapping("/admin/delete/{username}")
-    public ResponseEntity<?> deletePatientAccount(@PathVariable String username) {
+    @DeleteMapping
+    public ResponseEntity<?> deletePatientAccount(@RequestParam String username) {
         try {
             Patient existingPatient = patientService.findByUsername(username);
             if (existingPatient != null) {

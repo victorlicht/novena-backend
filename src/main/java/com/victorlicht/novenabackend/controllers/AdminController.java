@@ -35,7 +35,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<?> findByUsername(@RequestParam String username) {
         Admin existingAdmin = adminService.findByUsername(username);
 
@@ -50,7 +50,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createAdminAccount(@RequestBody Admin admin) {
         try {
             String hashedPassword = passwordEncoder.encode(admin.getPassword());
@@ -71,8 +71,8 @@ public class AdminController {
         }
     }
 
-    @PutMapping("/update/{username}")
-    public ResponseEntity<?> updateAdminAccount(@PathVariable String username, @RequestBody Admin admin) {
+    @PutMapping
+    public ResponseEntity<?> updateAdminAccount(@RequestParam String username, @RequestBody Admin admin) {
         try {
             Admin existingAdmin = adminService.findByUsername(username);
 
@@ -97,8 +97,8 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<?> deleteAdminAccount(@PathVariable String username) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteAdminAccount(@RequestParam String username) {
         try {
             Admin existingAdmin = adminService.findByUsername(username);
             if (existingAdmin != null) {

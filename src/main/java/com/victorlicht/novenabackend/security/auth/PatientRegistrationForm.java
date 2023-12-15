@@ -8,6 +8,7 @@ import java.sql.Date;
 @Getter
 @Setter
 public class PatientRegistrationForm {
+
     private String username;
 
     private String password;
@@ -25,4 +26,5 @@ public class PatientRegistrationForm {
     private String phoneNumber;
 
     private String healthInsurance;
+
 }

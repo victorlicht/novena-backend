@@ -45,7 +45,7 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<?> findByUsername(@RequestParam String username) {
         Doctor existingDoctor = doctorService.findByUsername(username);
 
@@ -60,7 +60,7 @@ public class DoctorController {
         }
     }
 
-    @PostMapping("/admin/create")
+    @PostMapping
     public ResponseEntity<?> createDoctorAccount(@RequestBody DoctorDto doctorDto) {
         try {
             String hashedPassword = passwordEncoder.encode(doctorDto.getPassword());
@@ -81,8 +81,8 @@ public class DoctorController {
         }
     }
 
-    @PutMapping("/admin/update/{username}")
-    public ResponseEntity<?> updateDoctorAccount(@PathVariable String username, @RequestBody DoctorDto doctorDto) {
+    @PutMapping
+    public ResponseEntity<?> updateDoctorAccount(@RequestParam String username, @RequestBody DoctorDto doctorDto) {
         try {
             Doctor existingDoctor = doctorService.findByUsername(username);
 
@@ -108,8 +108,8 @@ public class DoctorController {
         }
     }
 
-    @DeleteMapping("/admin/delete/{username}")
-    public ResponseEntity<?> deleteDoctorAccount(@PathVariable String username) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteDoctorAccount(@RequestParam String username) {
         try {
             Doctor existingDoctor = doctorService.findByUsername(username);
             if (existingDoctor != null) {
@@ -134,7 +134,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{username}/shifts")
-    public ResponseEntity<List<Shift>> listShifts(@PathVariable String username) {
+    public ResponseEntity<List<Shift>> listDoctorShifts(@PathVariable String username) {
         Doctor doctor = doctorService.findByUsername(username);
         if (doctor != null) {
             List<Shift> shifts = doctorService.listShifts();
@@ -151,7 +151,7 @@ public class DoctorController {
     }
 
     @PostMapping("/{username}/shifts")
-    public ResponseEntity<Shift> createShift(@PathVariable String username, @RequestBody Shift shift) {
+    public ResponseEntity<Shift> createDoctorShift(@PathVariable String username, @RequestBody Shift shift) {
         Doctor doctor = doctorService.findByUsername(username);
         if (doctor != null) {
             shift.setDoctor(doctor);
